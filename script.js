@@ -14,48 +14,62 @@ cheese.addEventListener("mouseup", (ev) => {
     isPressed = false;
 });
 
-document.addEventListener('mousemove', (ev) => {
+document.addEventListener('mousemove', drag);
+
+function drag(ev) {
+    // Move cheese when it's pressed.
     if (isPressed) {
-        // Move cheese when it's pressed.
         cheese.style.top = ev.clientY + "px";
         cheese.style.left = ev.clientX + "px";
     }
-});
+}
 
-function draw() {
-    idAnimationFrame = requestAnimationFrame(draw);
-    let shouldRender = false;
-    const speed = 2;
+/* 
+    Move rat to the encounter of the cheese.
 
-    const mousePos = {
-        left: mouse.getBoundingClientRect().left,
-        top: mouse.getBoundingClientRect().top
+    axis: left or top, the axis to move.
+*/
+function moveRat(rat, cheese, axis) {
+    // Movement speed
+    const speed = 1.5;
+
+    // Get positions
+    const ratPos = {
+        left: rat.getBoundingClientRect().left,
+        top: rat.getBoundingClientRect().top
     };
     const cheesePos = {
         left: cheese.getBoundingClientRect().left,
         top: cheese.getBoundingClientRect().top
     };
+    
+    // Strategy to know if I should sum or subtract the speed.
+    let sign = (cheesePos[axis] - ratPos[axis]);
+    sign = sign / Math.abs(sign);
 
-    // Update x coordinate
+    // Round position
+    if (sign > 0) {
+        ratPos[axis] = Math.min(ratPos[axis] + (sign * speed), cheesePos[axis]);
+    }
+    else if (sign < 0) {
+        ratPos[axis] = Math.max(ratPos[axis] + (sign * speed), cheesePos[axis]);
+    }
+
+    rat.style[axis] = ratPos[axis] + "px";
+}
+
+function draw() {
+    idAnimationFrame = requestAnimationFrame(draw);
+    let shouldRender = false;
+
+    // Update X coordinate
     if (mousePos.left !== cheesePos.left) {
-        // Strategy to know if I should sum or subtract the speed.
-        let sign = (cheesePos.left - mousePos.left);
-        sign = sign / Math.abs(sign);
-
-        mousePos.left += sign * speed;
-        mouse.style.left = mousePos.left + "px";
-
+        moveRat(mouse, cheese, "left");
         shouldRender = true;
     }
     // Update Y coordinate
     if (mousePos.top !== cheesePos.top) {
-        // Strategy to know if I should sum or subtract the speed.
-        let sign = (cheesePos.top - mousePos.top);
-        sign = sign / Math.abs(sign);
-
-        mousePos.top += sign * speed;
-        mouse.style.top = mousePos.top + "px";
-
+        moveRat(mouse, cheese, "top");
         shouldRender = true;
     }
 
