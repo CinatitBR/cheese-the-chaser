@@ -3,8 +3,17 @@ let idAnimationFrame;
 const cheese = document.getElementById("cheese");
 let isPressed = false;
 
-const mouse = document.getElementById("mouse");
-mousePos = { left: 0, top: 0 };
+const rat = document.getElementById("rat");
+
+// Get positions
+const ratPos = {
+    left: rat.getBoundingClientRect().left,
+    top: rat.getBoundingClientRect().top
+};
+const cheesePos = {
+    left: cheese.getBoundingClientRect().left,
+    top: cheese.getBoundingClientRect().top
+};
 
 cheese.addEventListener("mousedown", (ev) => {
     isPressed = true;
@@ -14,7 +23,7 @@ cheese.addEventListener("mouseup", (ev) => {
     isPressed = false;
 });
 
-document.addEventListener('mousemove', drag);
+document.addEventListener("mousemove", drag);
 
 function drag(ev) {
     // Move cheese when it's pressed.
@@ -24,24 +33,23 @@ function drag(ev) {
     }
 }
 
+// Get updated rat and cheese positions.
+function updatePositions() {
+    ratPos.left = rat.getBoundingClientRect().left;
+    ratPos.top = rat.getBoundingClientRect().top;
+
+    cheesePos.left = cheese.getBoundingClientRect().left;
+    cheesePos.top = cheese.getBoundingClientRect().top;
+}
+
 /* 
     Move rat to the encounter of the cheese.
 
     axis: left or top, the axis to move.
 */
-function moveRat(rat, cheese, axis) {
+function moveRat(rat, axis) {
     // Movement speed
     const speed = 1.5;
-
-    // Get positions
-    const ratPos = {
-        left: rat.getBoundingClientRect().left,
-        top: rat.getBoundingClientRect().top
-    };
-    const cheesePos = {
-        left: cheese.getBoundingClientRect().left,
-        top: cheese.getBoundingClientRect().top
-    };
     
     // Strategy to know if I should sum or subtract the speed.
     let sign = (cheesePos[axis] - ratPos[axis]);
@@ -62,14 +70,16 @@ function draw() {
     idAnimationFrame = requestAnimationFrame(draw);
     let shouldRender = false;
 
+    updatePositions();
+
     // Update X coordinate
-    if (mousePos.left !== cheesePos.left) {
-        moveRat(mouse, cheese, "left");
+    if (ratPos.left !== cheesePos.left) {
+        moveRat(rat, "left");
         shouldRender = true;
     }
     // Update Y coordinate
-    if (mousePos.top !== cheesePos.top) {
-        moveRat(mouse, cheese, "top");
+    if (ratPos.top !== cheesePos.top) {
+        moveRat(rat, "top");
         shouldRender = true;
     }
 
