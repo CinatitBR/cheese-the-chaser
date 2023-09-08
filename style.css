@@ -2,6 +2,14 @@ body {
     background-color: #1c1c1c;
 }
 
+.ant {
+    position: absolute;
+
+    height: 30px;
+    width: 30px;
+    background-color: black;
+}
+
 #cheese {
     position: absolute;
     top: 500px;
