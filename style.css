@@ -1,0 +1,26 @@
+body {
+    background-color: #1c1c1c;
+}
+
+#cheese {
+    position: absolute;
+    top: 500px;
+    left: 500px;
+    transform: translate(-50%, -50%);
+    width: 150px;
+    height: 150px;
+
+    background-color: rgb(255 255 180);
+    border-radius: 50%;
+}
+
+#mouse {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    top: 0;
+    left: 0;
+
+    background-color: #686868;
+    border-radius: 50%;
+}
