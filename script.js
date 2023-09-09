@@ -101,7 +101,16 @@ function chase(obj1, obj2, axis) {
     obj1.node.style[axis] = newPos[axis] + "px";
 }
 
-const ant = new Ant();
+const ants = [];
+for (let i = 0; i < 5; i++) {
+    
+    const top =  Math.floor(Math.random() * document.body.clientHeight);
+    const left = Math.floor(Math.random() * document.body.clientWidth);
+    
+    const newAnt = new Ant(top, left);
+
+    ants.push(newAnt);
+}
 
 function draw() {
     idAnimationFrame = requestAnimationFrame(draw);
@@ -120,15 +129,18 @@ function draw() {
         shouldRender = true;
     }
 
-    // Update X coordinate
-    if (ant.getPosition().left !== ratPos.left) {
-        chase(ant, rat, "left");
-        shouldRender = true;
-    }
-    // Update Y coordinate
-    if (ant.getPosition().top !== ratPos.top) {
-        chase(ant, rat, "top");
-        shouldRender = true;
+
+    for (const ant of ants) {
+        // Update X coordinate
+        if (ant.getPosition().left !== ratPos.left) {
+            chase(ant, rat, "left");
+            shouldRender = true;
+        }
+        // Update Y coordinate
+        if (ant.getPosition().top !== ratPos.top) {
+            chase(ant, rat, "top");
+            shouldRender = true;
+        }
     }
 
     if (!shouldRender) {
